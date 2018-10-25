@@ -6,7 +6,7 @@ var item = [];
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'password',
+    password: '',
     database: 'bamazon'
 });
 
@@ -48,20 +48,20 @@ function makePurchase() {
             }
         ])
         .then(answers => {
-            //console.log(answers.id);
-            //console.log(answers.quantity);
-            var stock = 0;
-
-
             connection.query('SELECT * FROM products WHERE item_id = ?', [answers.id], function (error, results, fields) {
                 if (error) throw error;
+
                 item = results;
+                if (!item[0]){
+                    console.log("\nPlease enter a valid ID and try again");
+                    return makePurchase();
+                }
                 if (answers.quantity <= item[0].stock_quantity) {
                     var total = answers.quantity * item[0].price;
                     connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?', [answers.quantity, answers.id], function (error, results, fields) {
                         if (error) throw error;
                         return console.log(`
-Your total is: $${total}
+Your total is: $${total.toFixed(2)}
 Your order is complete.
 
 Thanks for your business, come again!`)
@@ -70,7 +70,8 @@ Thanks for your business, come again!`)
                 }
                 else {
                     connection.end();
-                    return console.log("\nThere are not enough items in stock, please try again.\n\nCurrent Quantity is: " + item[0].stock_quantity);
+                    console.log("\nThere are not enough items in stock, please try again.\n\nCurrent Quantity is: " + item[0].stock_quantity);
+                    return makePurchase();
                 }
                 //connection.end();
 
