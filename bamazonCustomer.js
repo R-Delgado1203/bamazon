@@ -72,10 +72,7 @@ Thanks for your business, come again!`)
                     console.log("\nThere are not enough items in stock, please try again.\n\nCurrent Quantity is: " + item[0].stock_quantity);
                     return makePurchase();
                 }
-                //connection.end();
-
             });
         });
-    //console.log(allItems);
 }
 
