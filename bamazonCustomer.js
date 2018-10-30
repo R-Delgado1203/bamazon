@@ -6,7 +6,7 @@ var item = [];
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'password',
     database: 'bamazon'
 });
 
@@ -69,7 +69,6 @@ Thanks for your business, come again!`)
                     connection.end();
                 }
                 else {
-                    connection.end();
                     console.log("\nThere are not enough items in stock, please try again.\n\nCurrent Quantity is: " + item[0].stock_quantity);
                     return makePurchase();
                 }
